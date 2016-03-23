@@ -202,7 +202,9 @@ static NSTimeInterval const kTransformPart2AnimationDuration = 0.38;
                 break;
         }
 }
-
+- (void)resetViewsFrameWith:(CGSize)size {
+    NSLog(@"viewShow = %@,%@",NSStringFromCGRect(self.customView.frame),NSStringFromCGSize(size));
+}
 - (void)onActionClose:(CloseButton *)sender
 {
     [self hideWithCompletionBlock:nil];
@@ -348,8 +350,19 @@ static NSTimeInterval const kTransformPart2AnimationDuration = 0.38;
     [super viewDidLoad];
     
     self.viewShade = [[ShadeView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    //    self.viewShade.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+//    self.viewShade.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.viewShade.opaque = NO;
     [self.view addSubview:self.viewShade];
+}
+
+#pragma mark - Orientation
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAll;
+
+}
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [[XWHAlertView sharedInstance] resetViewsFrameWith:size];
 }
 @end
