@@ -8,8 +8,19 @@
 
 #import "XWHAlertView.h"
 
-//遮罩
+static CGFloat const kDefaultCloseButtonPadding = 15.0f;
+
+/**
+ * 遮罩
+ */
 @interface ShadeView : UIView
+
+@end
+
+/**
+ *  自定义的button
+ */
+@interface CloseButton : UIButton
 
 @end
 
@@ -32,6 +43,7 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) CustomViewControllor *customVC;
 @property (strong, nonatomic) CustomView *customView;
+@property (strong, nonatomic) CloseButton *btnClose;
 @end
 @implementation CustomView
 
@@ -78,6 +90,26 @@
     }
     return self;
 }
+
+- (void)setCloseButtonType:(ButtonPositionType)closeButtonType
+{
+    _closeButtonType = closeButtonType;
+    if (closeButtonType == ButtonPositionTypeNone) {
+        [self.btnClose setHidden:YES];
+    } else {
+        [self.btnClose setHidden:NO];
+        
+        CGRect closeFrame = self.btnClose.frame;
+        if(closeButtonType == ButtonPositionTypeRight){
+            
+            closeFrame.origin.x = round(CGRectGetWidth(self.customView.frame) - kDefaultCloseButtonPadding - CGRectGetWidth(closeFrame)/2);
+        } else {
+            closeFrame.origin.x = 0;
+        }
+        self.btnClose.frame = closeFrame;
+    }
+}
+
 - (void)setTapOutsideToDismiss:(BOOL)tapOutsideToDismiss {
     _tapOutsideToDismiss = tapOutsideToDismiss;
 }
@@ -104,11 +136,23 @@
     //add viewShow
     viewShow.frame = (CGRect){padding,padding,viewShow.bounds.size};
     [self.customView addSubview:viewShow];
-    NSLog(@"viewShow1 = %@",NSStringFromCGRect(viewShow.frame));
+//    NSLog(@"viewShow1 = %@",NSStringFromCGRect(viewShow.frame));
+//
+//    self.customView.backgroundColor = [UIColor greenColor];
+//    NSLog(@"viewShow2 = %@",NSStringFromCGRect(self.customView.frame));
 
-    self.customView.backgroundColor = [UIColor greenColor];
-    NSLog(@"viewShow2 = %@",NSStringFromCGRect(self.customView.frame));
+    //add close button
+    self.btnClose = [[CloseButton alloc]init];
+    [self.btnClose addTarget:self action:@selector(onActionClose:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customView addSubview:self.btnClose];
+    [self setCloseButtonType:self.closeButtonType];
 
+//    if(self.closeButtonType == ButtonPositionTypeRight){
+//        CGRect closeFrame = closeButton.frame;
+//        closeFrame.origin.x = CGRectGetWidth(containerView.bounds)-CGRectGetWidth(closeFrame);
+//        closeButton.frame = closeFrame;
+//    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.window makeKeyAndVisible];
     });
@@ -121,6 +165,10 @@
 //        return;
 //    }
 
+}
+- (void)onActionClose:(CloseButton *)sender
+{
+    [self hideAnimated:YES withCompletionBlock:nil];
 }
 - (void)cleanup
 {
@@ -136,6 +184,17 @@
 
 
 
+
+
+@implementation CloseButton
+
+- (instancetype)init {
+    if (self = [super initWithFrame:(CGRect){0, 0, 32, 32}]) {
+        [self setBackgroundImage:[UIImage imageNamed:@"btn_close"] forState:UIControlStateNormal];
+    }
+    return self;
+}
+@end
 
 
 #pragma mark - 遮罩 implementation
