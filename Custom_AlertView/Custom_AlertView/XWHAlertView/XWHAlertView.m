@@ -10,6 +10,10 @@
 
 static CGFloat const kDefaultCloseButtonPadding = 15.0f;
 
+static NSTimeInterval const kFadeInAnimationDuration = 0.5;
+static NSTimeInterval const kTransformPart1AnimationDuration = 0.25;
+static NSTimeInterval const kTransformPart2AnimationDuration = 0.38;
+
 /**
  * 遮罩
  */
@@ -86,7 +90,7 @@ static CGFloat const kDefaultCloseButtonPadding = 15.0f;
 }
 - (instancetype)init {
     if (self = [super init]) {
-        self.tapOutsideToDismiss = YES;
+        self.bTapOutsideToDismiss = YES;
     }
     return self;
 }
@@ -109,11 +113,13 @@ static CGFloat const kDefaultCloseButtonPadding = 15.0f;
         self.btnClose.frame = closeFrame;
     }
 }
-
-- (void)setTapOutsideToDismiss:(BOOL)tapOutsideToDismiss {
-    _tapOutsideToDismiss = tapOutsideToDismiss;
+- (void)setBTapOutsideToDismiss:(BOOL)bTapOutsideToDismiss {
+    _bTapOutsideToDismiss = bTapOutsideToDismiss;
 }
-- (void)showWithPresentView:(UIView *)viewShow animated:(BOOL)animated {
+- (void)showWithPresentView:(UIView *)viewShow animated:(AnimationType)animationType {
+    
+    _animationType = animationType;
+    
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     //add VC
@@ -147,29 +153,122 @@ static CGFloat const kDefaultCloseButtonPadding = 15.0f;
     [self.customView addSubview:self.btnClose];
     [self setCloseButtonType:self.closeButtonType];
 
-//    if(self.closeButtonType == ButtonPositionTypeRight){
-//        CGRect closeFrame = closeButton.frame;
-//        closeFrame.origin.x = CGRectGetWidth(containerView.bounds)-CGRectGetWidth(closeFrame);
-//        closeButton.frame = closeFrame;
-//    }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
         [self.window makeKeyAndVisible];
-    });
+        switch (animationType) {
+            case animationTypeNone:
+                break;
+            case animationTypeWave:
+            {
+                self.customVC.viewShade.alpha = 0;
+                [UIView animateWithDuration:kFadeInAnimationDuration animations:^{
+                    self.customVC.viewShade.alpha = 1;
+                }];
+                self.customView.alpha = 0;
+                self.customView.layer.shouldRasterize = YES;
+                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0, 0.0);
+                [UIView animateWithDuration:kTransformPart1AnimationDuration animations:^{
+                    self.customView.alpha = 1;
+                    self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.5, 1.5);
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:.25 animations:^{
+                        self.customView.alpha = 0.5;
+                        self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5);
+                    } completion:^(BOOL finished) {
+                        [UIView animateWithDuration:kTransformPart2AnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                            self.customView.alpha = 1;
+                            self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+                        } completion:^(BOOL finished2) {
+                            self.customView.layer.shouldRasterize = NO;
+                        }];
+                        
+                    }];
+                }];
+            }
+            case animationTypeZoom:
+            {
+                self.customVC.viewShade.alpha = 0;
+                self.customView.alpha = 0.2;
+                self.customView.layer.shouldRasterize = YES;
+                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.2, 0.2);
+                [UIView animateWithDuration:0.38 animations:^{
+                    self.customVC.viewShade.alpha = 1;
+                    self.customView.alpha = 1;
+                    self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+                }];
+            }
+                break;
+            default:
+                break;
+        }
 }
-- (void)hideAnimated:(BOOL)animated withCompletionBlock:(void(^)())completion
-{
-    [self cleanup];
-//    if(!animated){
-//        [self cleanup];
-//        return;
-//    }
 
-}
 - (void)onActionClose:(CloseButton *)sender
 {
-    [self hideAnimated:YES withCompletionBlock:nil];
+    [self hideWithCompletionBlock:nil];
 }
+
+- (void)hideWithCompletionBlock:(void(^)())completion
+{
+    AnimationType animationTemp = self.animationType;
+    switch (animationTemp) {
+        case animationTypeNone:
+            [self cleanup];
+            break;
+        case animationTypeWave:
+        {
+            self.customVC.viewShade.alpha = 1;
+            self.customView.alpha = 1;
+            self.customView.layer.shouldRasterize = YES;
+            self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+            [UIView animateWithDuration:kTransformPart1AnimationDuration animations:^{
+                self.customView.alpha = 0.75;
+                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:.25 animations:^{
+                    self.customView.alpha = 1;
+                    self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.25, 1.25);
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:kTransformPart2AnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                        self.customView.alpha = 1;
+                        self.customVC.viewShade.alpha = 0.3;
+                        self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5);
+                    } completion:^(BOOL finished2) {
+                        self.customView.layer.shouldRasterize = NO;
+                        [self cleanup];
+                        if(completion){
+                            completion();
+                        }
+                    }];
+                    
+                }];
+            }];
+        }
+            break;
+        case animationTypeZoom:
+        {
+            self.customVC.viewShade.alpha = 1;
+            self.customView.alpha = 1;
+            self.customView.layer.shouldRasterize = YES;
+            self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+            [UIView animateWithDuration:0.25 animations:^{
+                self.customVC.viewShade.alpha = 0.3;
+                self.customView.alpha = 0.3;
+                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.25, 0.25);
+            } completion:^(BOOL finished) {
+                [self cleanup];
+                if(completion){
+                    completion();
+                }
+            }];
+        }
+            break;
+        default:
+            break;
+    }
+
+}
+
 - (void)cleanup
 {
     [self.customView removeFromSuperview];
@@ -179,7 +278,6 @@ static CGFloat const kDefaultCloseButtonPadding = 15.0f;
     [self.window removeFromSuperview];
     self.window = nil;
 }
-
 @end
 
 
@@ -228,8 +326,8 @@ static CGFloat const kDefaultCloseButtonPadding = 15.0f;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    if ([XWHAlertView sharedInstance].tapOutsideToDismiss) {
-        [[XWHAlertView sharedInstance] hideAnimated:YES withCompletionBlock:nil];
+    if ([XWHAlertView sharedInstance].bTapOutsideToDismiss) {
+        [[XWHAlertView sharedInstance] hideWithCompletionBlock:nil];
     }
 }
 

@@ -22,12 +22,13 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 300)];
-    self.contentView.backgroundColor = [UIColor redColor];
+    self.contentView.backgroundColor = [UIColor greenColor];
 
 }
 - (IBAction)onAction:(id)sender {
 
-    [[XWHAlertView sharedInstance] showWithPresentView:_contentView animated:NO];
+    [XWHAlertView sharedInstance].closeButtonType = ButtonPositionTypeRight;
+    [[XWHAlertView sharedInstance] showWithPresentView:_contentView animated:animationTypeZoom];
 
 }
 

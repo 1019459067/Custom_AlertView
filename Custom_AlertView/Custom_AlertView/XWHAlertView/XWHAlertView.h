@@ -25,14 +25,19 @@ typedef NS_ENUM(NSInteger, ShadeBackgroundType) {
     ShadeBackgroundTypeSolid = 1 << 0
 };
 
+typedef NS_ENUM(NSInteger, AnimationType) {
+    animationTypeNone = 0,
+    animationTypeWave = 1 << 0,
+    animationTypeZoom = 2 << 0
+};
 typedef void(^completeBlock)(void);
 
 @interface XWHAlertView : NSObject
 
-@property (assign, nonatomic) BOOL tapOutsideToDismiss;//点击蒙板是否弹出视图消失
+@property (assign, nonatomic) BOOL bTapOutsideToDismiss;//点击蒙板是否弹出视图消失 default is dissMiss
 @property (assign, nonatomic) ShadeBackgroundType shadeBackgroundType;//蒙板的背景色 default is 0
 @property (assign, nonatomic) ButtonPositionType closeButtonType;//关闭按钮的类型 default is 0
-
+@property (assign, nonatomic) AnimationType animationType;
 /**
  *  创建一个实例
  */
@@ -44,6 +49,6 @@ typedef void(^completeBlock)(void);
  *  @param presentView show view
  *  @param animated    是否动画
  */
-- (void)showWithPresentView:(UIView *)viewShow animated:(BOOL)animated;
+- (void)showWithPresentView:(UIView *)viewShow animated:(AnimationType)animationType;
 
 @end
