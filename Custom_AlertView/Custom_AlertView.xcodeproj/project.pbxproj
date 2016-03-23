@@ -13,6 +13,7 @@
 		56310F691CA2D41D002276AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56310F671CA2D41D002276AB /* Main.storyboard */; };
 		56310F6B1CA2D41D002276AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56310F6A1CA2D41D002276AB /* Assets.xcassets */; };
 		56310F6E1CA2D41D002276AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56310F6C1CA2D41D002276AB /* LaunchScreen.storyboard */; };
+		56310F781CA2D58D002276AB /* XWHAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 56310F771CA2D58D002276AB /* XWHAlertView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		56310F6A1CA2D41D002276AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56310F6D1CA2D41D002276AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		56310F6F1CA2D41D002276AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56310F761CA2D58D002276AB /* XWHAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWHAlertView.h; sourceTree = "<group>"; };
+		56310F771CA2D58D002276AB /* XWHAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWHAlertView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 		56310F5D1CA2D41D002276AB /* Custom_AlertView */ = {
 			isa = PBXGroup;
 			children = (
+				56310F751CA2D58D002276AB /* XWHAlertView */,
 				56310F611CA2D41D002276AB /* AppDelegate.h */,
 				56310F621CA2D41D002276AB /* AppDelegate.m */,
 				56310F641CA2D41D002276AB /* ViewController.h */,
@@ -77,6 +81,15 @@
 				56310F5F1CA2D41D002276AB /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		56310F751CA2D58D002276AB /* XWHAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				56310F761CA2D58D002276AB /* XWHAlertView.h */,
+				56310F771CA2D58D002276AB /* XWHAlertView.m */,
+			);
+			path = XWHAlertView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,6 +165,7 @@
 				56310F661CA2D41D002276AB /* ViewController.m in Sources */,
 				56310F631CA2D41D002276AB /* AppDelegate.m in Sources */,
 				56310F601CA2D41D002276AB /* main.m in Sources */,
+				56310F781CA2D58D002276AB /* XWHAlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +316,7 @@
 				56310F741CA2D41D002276AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

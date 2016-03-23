@@ -7,8 +7,11 @@
 //
 
 #import "ViewController.h"
+#import "XWHAlertView.h"
 
 @interface ViewController ()
+
+@property (strong, nonatomic) UIView *contentView;
 
 @end
 
@@ -17,9 +20,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 300)];
+    self.contentView.backgroundColor = [UIColor redColor];
+
 }
 - (IBAction)onAction:(id)sender {
-    
+
+    [[XWHAlertView sharedInstance] showWithPresentView:_contentView animated:NO];
+
 }
 
 - (void)didReceiveMemoryWarning {
