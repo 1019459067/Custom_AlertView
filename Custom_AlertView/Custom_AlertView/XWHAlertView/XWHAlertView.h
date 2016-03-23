@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, ShadeBackgroundType) {
 typedef void(^completeBlock)(void);
 @interface XWHAlertView : NSObject
 @property (assign, nonatomic) BOOL tapOutsideToDismiss;//点击蒙板是否弹出视图消失
-@property (assign, nonatomic) ShadeBackgroundType shadeBackgroundType;//蒙板的背景色
+@property (assign, nonatomic) ShadeBackgroundType shadeBackgroundType;//蒙板的背景色 default is ShadeBackgroundTypeGradient
 @property (assign, nonatomic) ButtonPositionType closeButtonType;//关闭按钮的类型
 
 /**
