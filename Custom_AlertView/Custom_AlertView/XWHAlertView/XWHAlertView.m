@@ -13,10 +13,6 @@
 
 @end
 
-
-
-
-
 /**
  *  自定义 VC
  */
@@ -82,7 +78,9 @@
     }
     return self;
 }
-
+- (void)setTapOutsideToDismiss:(BOOL)tapOutsideToDismiss {
+    _tapOutsideToDismiss = tapOutsideToDismiss;
+}
 - (void)showWithPresentView:(UIView *)viewShow animated:(BOOL)animated {
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -90,7 +88,9 @@
     self.customVC = [[CustomViewControllor alloc]init];
     self.window.rootViewController = self.customVC;
     
-    CGFloat padding = 15;
+    // padding  值不同可能 viewShow 位置不居中
+    CGFloat padding = 0;
+    
     //CGRectInset  将原来的矩形放大或者缩小，＋表示缩小；－表示放大
     CGRect rectContainer = CGRectInset(viewShow.bounds, -padding, -padding);
     //round() 舍入为最近的整数（四舍五入）
@@ -104,6 +104,10 @@
     //add viewShow
     viewShow.frame = (CGRect){padding,padding,viewShow.bounds.size};
     [self.customView addSubview:viewShow];
+    NSLog(@"viewShow1 = %@",NSStringFromCGRect(viewShow.frame));
+
+    self.customView.backgroundColor = [UIColor greenColor];
+    NSLog(@"viewShow2 = %@",NSStringFromCGRect(self.customView.frame));
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.window makeKeyAndVisible];
@@ -138,7 +142,7 @@
 
 @implementation ShadeView
 
-- (void)drawRect:(CGRect)rect{
+- (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     if ([XWHAlertView sharedInstance].shadeBackgroundType == ShadeBackgroundTypeSolid)
@@ -185,9 +189,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-//    self.view.backgroundColor = [UIColor clearColor];
-//    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
     self.viewShade = [[ShadeView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //    self.viewShade.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
