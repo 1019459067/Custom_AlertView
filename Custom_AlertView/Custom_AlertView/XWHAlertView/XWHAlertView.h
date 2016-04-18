@@ -1,6 +1,6 @@
 //
 //  XWHAlertView.h
-//  Test_AlertView
+//  AlertView_Custom
 //
 //  Created by ST on 16/3/23.
 //  Copyright © 2016年 xwh. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  XWHAlertView.m
-//  Test_AlertView
+//  AlertView_Custom
 //
 //  Created by ST on 16/3/23.
 //  Copyright © 2016年 xwh. All rights reserved.
@@ -154,53 +154,53 @@ static NSTimeInterval const kTransformPart2AnimationDuration = 0.38;
     [self setCloseButtonType:self.closeButtonType];
 
     
-        [self.window makeKeyAndVisible];
-        switch (animationType) {
-            case animationTypeNone:
-                break;
-            case animationTypeWave:
-            {
-                self.customVC.viewShade.alpha = 0;
-                [UIView animateWithDuration:kFadeInAnimationDuration animations:^{
-                    self.customVC.viewShade.alpha = 1;
-                }];
-                self.customView.alpha = 0;
-                self.customView.layer.shouldRasterize = YES;
-                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0, 0.0);
-                [UIView animateWithDuration:kTransformPart1AnimationDuration animations:^{
-                    self.customView.alpha = 1;
-                    self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.5, 1.5);
+    [self.window makeKeyAndVisible];
+    switch (animationType) {
+        case animationTypeNone:
+            break;
+        case animationTypeWave:
+        {
+            self.customVC.viewShade.alpha = 0;
+            [UIView animateWithDuration:kFadeInAnimationDuration animations:^{
+                self.customVC.viewShade.alpha = 1;
+            }];
+            self.customView.alpha = 0;
+            self.customView.layer.shouldRasterize = YES;
+            self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0, 0.0);
+            [UIView animateWithDuration:kTransformPart1AnimationDuration animations:^{
+                self.customView.alpha = 1;
+                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.5, 1.5);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:.25 animations:^{
+                    self.customView.alpha = 0.5;
+                    self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5);
                 } completion:^(BOOL finished) {
-                    [UIView animateWithDuration:.25 animations:^{
-                        self.customView.alpha = 0.5;
-                        self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5);
-                    } completion:^(BOOL finished) {
-                        [UIView animateWithDuration:kTransformPart2AnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                            self.customView.alpha = 1;
-                            self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-                        } completion:^(BOOL finished2) {
-                            self.customView.layer.shouldRasterize = NO;
-                        }];
-                        
+                    [UIView animateWithDuration:kTransformPart2AnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                        self.customView.alpha = 1;
+                        self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+                    } completion:^(BOOL finished2) {
+                        self.customView.layer.shouldRasterize = NO;
                     }];
+                    
                 }];
-            }
-            case animationTypeZoom:
-            {
-                self.customVC.viewShade.alpha = 0;
-                self.customView.alpha = 0.2;
-                self.customView.layer.shouldRasterize = YES;
-                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.2, 0.2);
-                [UIView animateWithDuration:0.38 animations:^{
-                    self.customVC.viewShade.alpha = 1;
-                    self.customView.alpha = 1;
-                    self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-                }];
-            }
-                break;
-            default:
-                break;
+            }];
         }
+        case animationTypeZoom:
+        {
+            self.customVC.viewShade.alpha = 0;
+            self.customView.alpha = 0.2;
+            self.customView.layer.shouldRasterize = YES;
+            self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.2, 0.2);
+            [UIView animateWithDuration:0.38 animations:^{
+                self.customVC.viewShade.alpha = 1;
+                self.customView.alpha = 1;
+                self.customView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+            }];
+        }
+            break;
+        default:
+            break;
+    }
 }
 - (void)resetViewsFrameWith:(CGSize)size {
     NSLog(@"viewShow = %@,%@",NSStringFromCGRect(self.customView.frame),NSStringFromCGSize(size));

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Custom_AlertView.xcodeproj">
+      location = "self:/Users/XiaoWeihua/MyRespository/Custom_AlertView/AlertView_Custom.xcodeproj">
    </FileRef>
 </Workspace>
