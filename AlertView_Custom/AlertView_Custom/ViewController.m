@@ -8,10 +8,10 @@
 
 #import "ViewController.h"
 #import "XWHAlertView.h"
-
+#import "MyView.h"
 @interface ViewController ()
 
-@property (strong, nonatomic) UIView *contentView;
+@property (strong, nonatomic) MyView *contentView;
 
 @end
 
@@ -21,9 +21,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 300)];
-    self.contentView.backgroundColor = [UIColor greenColor];
-
+    self.contentView = [[MyView alloc] initWithFrame:CGRectMake(0, 0, 200, 300)];
+//    self.contentView.backgroundColor = [UIColor greenColor];
+    self.contentView.strName = @"1019459067";
+    self.contentView.strPW = @"深南大道";
+    self.contentView.image = [UIImage imageNamed:@"20141108162654_xthYT.jpg"];
 }
 - (IBAction)onAction:(id)sender {
 
